@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.streamlit/secrets.toml
+database/*.db
+*.db
+models/*.joblib
+.pytest_cache/
+.ipynb_checkpoints/
+.vscode/
