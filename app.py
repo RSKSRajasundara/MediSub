@@ -265,17 +265,24 @@ apply_styles()
 if "page" not in st.session_state:
     st.session_state.page = "Home"
 
+
 render_header()
-pages = ["Home", "Ask a Question", "Documents", "Checklist", "About and Help"]
+
+pages = [
+    "Home",
+    "Ask a Question",
+    "Documents",
+    "Checklist",
+    "About and Help",
+]
+
 selected = st.radio(
     "Main navigation",
     pages,
     horizontal=True,
     label_visibility="collapsed",
-    index=pages.index(st.session_state.page),
+    key="page",
 )
-if selected != st.session_state.page:
-    st.session_state.page = selected
 
 if selected == "Home":
     home_page()
