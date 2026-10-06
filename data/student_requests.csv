@@ -1,0 +1,28 @@
+id,question,category
+
+1,How do I submit a medical request?,PROCESS_GUIDANCE
+2,What is the complete process for submitting a medical?,PROCESS_GUIDANCE
+3,What should I do after missing a lecture because of illness?,PROCESS_GUIDANCE
+4,Can you explain the medical submission procedure?,PROCESS_GUIDANCE
+5,I need help with the medical submission process,PROCESS_GUIDANCE
+6,How can I get a reference number?,REFERENCE_NUMBER_HELP
+7,When should I call the Medical Centre?,REFERENCE_NUMBER_HELP
+8,Who gives the medical reference number?,REFERENCE_NUMBER_HELP
+9,I did not receive my reference number,REFERENCE_NUMBER_HELP
+10,I forgot to call on the absence date,REFERENCE_NUMBER_HELP
+11,What documents should I prepare?,DOCUMENT_REQUIREMENTS
+12,Do I need a letter for the submission?,DOCUMENT_REQUIREMENTS
+13,Is a medical report required?,DOCUMENT_REQUIREMENTS
+14,What forms should I complete?,DOCUMENT_REQUIREMENTS
+15,Which papers are required for a medical submission?,DOCUMENT_REQUIREMENTS
+16,Where should I submit my documents?,MA_SUBMISSION_HELP
+17,Which MA should receive my medical?,MA_SUBMISSION_HELP
+18,Who should I give the completed forms to?,MA_SUBMISSION_HELP
+19,Where do I hand over my medical report?,MA_SUBMISSION_HELP
+20,How can I contact the relevant MA?,MA_SUBMISSION_HELP
+21,Can this system approve my medical?,OUT_OF_SCOPE
+22,Can you calculate my attendance?,OUT_OF_SCOPE
+23,What medicine should I take?,OUT_OF_SCOPE
+24,How do I apply for a repeat examination?,OUT_OF_SCOPE
+25,Can you check whether my medical report is genuine?,OUT_OF_SCOPE
+26,Can you tell me the weather forecast?,OUT_OF_SCOPE
