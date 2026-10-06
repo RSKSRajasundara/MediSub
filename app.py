@@ -1,578 +1,298 @@
+from pathlib import Path
+from html import escape
 import streamlit as st
 
-# =========================================================
-# PAGE CONFIGURATION
-# =========================================================
+from styles import apply_styles
+from documents import render_documents_page
+
+try:
+    from question_service import predict_question
+except ImportError:
+    predict_question = None
 
 st.set_page_config(
     page_title="MediSub",
-    page_icon="🏥",
-    layout="wide"
+    page_icon="🩺",
+    layout="wide",
+    initial_sidebar_state="collapsed",
 )
 
-# =========================================================
-# SESSION STATE
-# =========================================================
-
-if "page" not in st.session_state:
-    st.session_state.page = "home"
 
 
-# =========================================================
-# CSS
-# =========================================================
-
-st.markdown("""
-<style>
-
-.main-title {
-    text-align: center;
-    font-size: 48px;
-    font-weight: bold;
-    margin-top: 30px;
+CATEGORY_GUIDANCE = {
+    "PROCESS_GUIDANCE": {
+        "title": "Medical-submission process",
+        "answer": "Confirm the procedure, obtain the reference number, prepare the required documents and submit them through the correct university office.",
+        "next_step": "Open Documents and review the required forms.",
+    },
+    "REFERENCE_NUMBER_HELP": {
+        "title": "Reference-number guidance",
+        "answer": "Contact the University Medical Centre on the required day and follow its official instructions to obtain your reference number.",
+        "next_step": "Confirm the reference-number procedure with the Medical Centre.",
+    },
+    "DOCUMENT_REQUIREMENTS": {
+        "title": "Required documents",
+        "answer": "Prepare the Medical Approval Request Form, cover letter and supporting medical certificate or report. Complete only the student sections.",
+        "next_step": "Download and check the documents on the Documents page.",
+    },
+    "MA_SUBMISSION_HELP": {
+        "title": "Submission guidance",
+        "answer": "After completing the documents and obtaining the required signatures, submit them to the confirmed Medical Assistant or responsible faculty office.",
+        "next_step": "Confirm the submission location with your faculty.",
+    },
+    "OUT_OF_SCOPE": {
+        "title": "Outside MediSub's scope",
+        "answer": "MediSub only provides guidance about the university medical-submission process.",
+        "next_step": "Ask about the process, reference number, documents or submission point.",
+    },
 }
 
-.subtitle {
-    text-align: center;
-    font-size: 20px;
-    margin-bottom: 30px;
-}
 
-.card {
-    padding: 25px;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    min-height: 170px;
-    margin-bottom: 20px;
-}
-
-.warning {
-    padding: 20px;
-    border: 1px solid #f0ad4e;
-    border-radius: 10px;
-    margin-top: 25px;
-}
-
-</style>
-""", unsafe_allow_html=True)
+def change_page(page_name: str) -> None:
+    st.session_state.page = page_name
 
 
-# =========================================================
-# NAVIGATION
-# =========================================================
-
-def navigation():
-
-    st.sidebar.title("🏥 MediSub")
-
-    if st.sidebar.button("🏠 Home", use_container_width=True):
-        st.session_state.page = "home"
-        st.rerun()
-
-    if st.sidebar.button("💬 Ask a Question", use_container_width=True):
-        st.session_state.page = "ask"
-        st.rerun()
-
-    if st.sidebar.button("📋 Check Requirements", use_container_width=True):
-        st.session_state.page = "checklist"
-        st.rerun()
+def clear_question() -> None:
+    st.session_state.medical_question = ""
 
 
-# =========================================================
-# HOME PAGE
-# =========================================================
-
-def home_page():
-
+def render_header() -> None:
     st.markdown(
-        '<div class="main-title">🏥 MediSub</div>',
-        unsafe_allow_html=True
+        '<div class="brand"><span class="brand-mark">M</span>'
+        '<span class="brand-name">MediSub</span></div>',
+        unsafe_allow_html=True,
     )
 
+
+def render_footer() -> None:
     st.markdown(
-        '<div class="subtitle">'
-        'University Medical Submission Assistant'
-        '</div>',
-        unsafe_allow_html=True
+        '<p class="footer">MediSub — academic prototype for medical-submission guidance</p>',
+        unsafe_allow_html=True,
     )
 
-    st.divider()
 
-    st.header("Welcome to MediSub")
-
-    st.write(
-        """
-        MediSub is an AI-based university administrative assistant
-        designed to help students understand the medical submission
-        process.
-
-        You can ask questions about medical submissions, check
-        your requirements, and receive guidance about the next
-        administrative step.
-        """
+def home_page() -> None:
+    st.markdown(
+        '<section class="hero">'
+        '<p class="eyebrow">Medical submission guidance</p>'
+        '<h1>Prepare your medical submission correctly</h1>'
+        '<p class="lead">Ask a question, prepare the required documents and check every requirement before submission.</p>'
+        '</section>',
+        unsafe_allow_html=True,
+    )
+    # Home-page buttons
+    empty_left, action_1, action_2, empty_right = st.columns(
+        [1, 1.2, 1.2, 1]
     )
 
-    st.divider()
-
-    st.subheader("How can we help you?")
-
-    col1, col2 = st.columns(2)
-
-    # ASK QUESTION BUTTON
-    with col1:
-
-        if st.button(
-            "💬 Ask a Question",
+    with action_1:
+        st.button(
+            "Ask a question",
+            type="primary",
             use_container_width=True,
-            type="primary"
-        ):
-            st.session_state.page = "ask"
-            st.rerun()
+            on_click=change_page,
+            args=("Ask a Question",),
+        )
 
-    # CHECK REQUIREMENTS BUTTON
-    with col2:
+    with action_2:
+        st.button(
+            "Check requirements",
+            use_container_width=True,
+            on_click=change_page,
+            args=("Checklist",),
+        )
 
-        if st.button(
-            "📋 Check Requirements",
-            use_container_width=True
-        ):
-            st.session_state.page = "checklist"
-            st.rerun()
-
-    st.divider()
-
-    st.header("Main Features")
-
+    # Feature cards
     col1, col2, col3 = st.columns(3)
 
-    with col1:
+    cards = [
+        (
+            col1,
+            "teal-edge",
+            "01",
+            "AI question guidance",
+            "Get a predicted category, confidence score and suggested next step.",
+        ),
+        (
+            col2,
+            "violet-edge",
+            "02",
+            "Document preparation",
+            "Download templates and check scanned documents for possible missing information.",
+        ),
+        (
+            col3,
+            "coral-edge",
+            "03",
+            "Submission checklist",
+            "Track the important requirements before submitting documents to staff.",
+        ),
+    ]
 
-        st.markdown("""
-        <div class="card">
+    for column, edge, number, title, description in cards:
+        with column:
+            st.markdown(
+                f"""
+                <div class="card {edge}">
+                    <div class="icon-box">{number}</div>
+                    <h3>{title}</h3>
+                    <p>{description}</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
-        ### 🤖 AI Question Classification
 
-        Ask a question and MediSub identifies
-        the relevant administrative category.
-
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col2:
-
-        st.markdown("""
-        <div class="card">
-
-        ### 📋 Requirement Checking
-
-        Check the important requirements
-        before submitting your medical documents.
-
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col3:
-
-        st.markdown("""
-        <div class="card">
-
-        ### 🧭 Next-Step Guidance
-
-        Receive guidance about what you
-        should do next.
-
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.divider()
-
-    st.markdown("""
-    <div class="warning">
-
-    ### 🔒 Privacy Warning
-
-    Please do not enter sensitive personal or medical
-    information into this prototype.
-
-    Avoid entering:
-
-    - Student registration numbers
-    - Passwords
-    - Private medical records
-    - Detailed medical diagnoses
-    - Other sensitive personal information
-
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.divider()
-
-    st.info(
-        """
-        ⚠️ **Prototype Disclaimer**
-
-        MediSub is an academic prototype developed for
-        educational purposes. It provides administrative
-        guidance and does not replace official university
-        staff or official university procedures.
-        """
+    st.markdown(
+        '<div class="notice notice-teal"><strong>Privacy notice:</strong> '
+        'Use fictional or redacted documents for prototype demonstrations. Do not upload real sensitive medical information.</div>',
+        unsafe_allow_html=True,
     )
 
 
-# =========================================================
-# ASK QUESTION PAGE
-# =========================================================
-
-def ask_question_page():
-
-    st.title("💬 Ask a Question")
-
-    st.write(
-        "Ask a question about the university medical submission process."
-    )
-
-    # HOME BUTTON
-    if st.button("🏠 Back to Home"):
-        st.session_state.page = "home"
-        st.rerun()
-
-    st.divider()
-
-    st.subheader("Enter your question")
+def ask_page() -> None:
+    st.title("Ask a question")
+    st.markdown('<p class="page-lead">Describe your medical-submission question in plain language.</p>', unsafe_allow_html=True)
 
     question = st.text_area(
-        "Question",
-        placeholder=(
-            "Example: What documents do I need "
-            "for medical submission?"
-        ),
-        height=150
+        "Your question",
+        placeholder="Example: What documents do I need to submit?",
+        height=120,
+        key="medical_question",
+    )
+    st.markdown(
+        '<div class="chips"><span>How do I get a reference number?</span>'
+        '<span>Which documents are required?</span><span>Where should I submit them?</span></div>',
+        unsafe_allow_html=True,
     )
 
-    st.subheader("Example Questions")
+    left, right = st.columns([1, 4])
+    with left:
+        run_prediction = st.button("Get guidance", type="primary", use_container_width=True)
+    with right:
+        st.button("Clear", key="clear_question_button", on_click=clear_question)
 
-    example_col1, example_col2 = st.columns(2)
+    if not run_prediction:
+        return
+    if not question.strip():
+        st.warning("Please enter a question first.")
+        return
+    if predict_question is None:
+        st.error("question_service.py could not be loaded. Keep it beside app.py.")
+        return
 
-    with example_col1:
+    try:
+        prediction = predict_question(question)
+        category = prediction["category"]
+        confidence = float(prediction["confidence"])
+        needs_referral = prediction["needs_referral"]
+        model_answer = ""
+        percent = round(confidence * 100 if confidence <= 1 else confidence)
+        details = CATEGORY_GUIDANCE.get(category, CATEGORY_GUIDANCE["OUT_OF_SCOPE"])
+        answer = model_answer or details["answer"]
 
-        if st.button(
-            "What documents do I need?",
-            use_container_width=True
-        ):
-            st.session_state.question = (
-                "What documents do I need for medical submission?"
+        st.markdown('<div class="section-divider"></div><p class="result-label">Suggested result</p>', unsafe_allow_html=True)
+        result_col, confidence_col = st.columns([3, 1])
+        with result_col:
+            st.markdown(
+                f'<div class="result-card"><span class="pill pill-teal">{escape(details["title"])}</span>'
+                f'<p class="result-answer">{escape(answer)}</p>'
+                f'<div class="notice notice-teal"><strong>Recommended action:</strong> {escape(details["next_step"])}</div></div>',
+                unsafe_allow_html=True,
             )
-            st.rerun()
-
-        if st.button(
-            "How do I submit my medical?",
-            use_container_width=True
-        ):
-            st.session_state.question = (
-                "How do I submit my medical?"
-            )
-            st.rerun()
-
-    with example_col2:
-
-        if st.button(
-            "Where can I get my reference number?",
-            use_container_width=True
-        ):
-            st.session_state.question = (
-                "Where can I get my reference number?"
-            )
-            st.rerun()
-
-        if st.button(
-            "What is the medical submission process?",
-            use_container_width=True
-        ):
-            st.session_state.question = (
-                "What is the medical submission process?"
-            )
-            st.rerun()
-
-    # Use selected example question
-    if "question" in st.session_state:
-        question = st.session_state.question
-
-    st.divider()
-
-    col1, col2 = st.columns(2)
-
-    # CHECK QUESTION
-    with col1:
-
-        if st.button(
-            "🔍 Check Question",
-            use_container_width=True,
-            type="primary"
-        ):
-
-            if not question.strip():
-
-                st.warning("Please enter a question first.")
-
-            else:
-
-                # Temporary classification
-                # We will connect predictor.py here next.
-
-                question_lower = question.lower()
-
-                if (
-                    "document" in question_lower
-                    or "documents" in question_lower
-                    or "report" in question_lower
-                ):
-
-                    category = "DOCUMENT_REQUIREMENTS"
-                    confidence = 90
-
-                    guidance = (
-                        "Check that you have prepared the required "
-                        "medical documents before submission."
-                    )
-
-                    next_action = (
-                        "Review the required documents and prepare "
-                        "any missing items."
-                    )
-
-                elif (
-                    "submit" in question_lower
-                    or "submission" in question_lower
-                    or "process" in question_lower
-                ):
-
-                    category = "PROCESS_GUIDANCE"
-                    confidence = 88
-
-                    guidance = (
-                        "Follow the university medical submission "
-                        "process and confirm the required steps."
-                    )
-
-                    next_action = (
-                        "Review the submission process and contact "
-                        "the relevant university staff if you are unsure."
-                    )
-
-                elif (
-                    "reference" in question_lower
-                    or "number" in question_lower
-                ):
-
-                    category = "REFERENCE_NUMBER_HELP"
-                    confidence = 87
-
-                    guidance = (
-                        "Your medical reference number is used to "
-                        "identify your medical submission."
-                    )
-
-                    next_action = (
-                        "Check your medical documentation or contact "
-                        "the relevant medical centre."
-                    )
-
-                else:
-
-                    category = "OUT_OF_SCOPE"
-                    confidence = 45
-
-                    guidance = (
-                        "MediSub could not confidently identify "
-                        "the category of your question."
-                    )
-
-                    next_action = (
-                        "Please contact the relevant university "
-                        "staff member for confirmation."
-                    )
-
-                # RESULTS
-                st.divider()
-
-                st.subheader("Prediction Result")
-
-                result_col1, result_col2 = st.columns(2)
-
-                with result_col1:
-                    st.metric(
-                        "Predicted Category",
-                        category
-                    )
-
-                with result_col2:
-                    st.metric(
-                        "Confidence",
-                        f"{confidence}%"
-                    )
-
-                st.subheader("🧭 Guidance")
-
-                st.info(guidance)
-
-                st.subheader("➡️ Recommended Next Action")
-
-                st.success(next_action)
-
-                if confidence < 60:
-
-                    st.warning(
-                        "⚠️ The system is not confident about "
-                        "this question. Please contact university "
-                        "staff for confirmation."
-                    )
-
-    # CLEAR BUTTON
-    with col2:
-
-        if st.button(
-            "🗑️ Clear",
-            use_container_width=True
-        ):
-
-            if "question" in st.session_state:
-                del st.session_state.question
-
-            st.rerun()
+        with confidence_col:
+            st.markdown('<div class="metric-card">', unsafe_allow_html=True)
+            st.metric("Model confidence", f"{percent}%")
+            st.progress(max(0, min(percent, 100)) / 100)
+            st.caption(f"Category: {category}")
+            st.markdown('</div>', unsafe_allow_html=True)
+        if needs_referral:
+            st.warning("The model is not fully certain. Add more detail or confirm the answer with authorized staff.")
+    except Exception as exc:
+        st.error(f"The question could not be checked: {exc}")
 
 
-# =========================================================
-# CHECKLIST PAGE
-# =========================================================
-
-def checklist_page():
-
-    st.title("📋 Check Medical Requirements")
-
-    st.write(
-        "Use this checklist to check whether you are ready "
-        "for medical submission."
+def checklist_page() -> None:
+    st.title("Submission checklist")
+    st.markdown('<p class="page-lead">Complete these checks before submitting your medical documents.</p>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="step-row"><div><b>1</b><span>Get reference</span></div>'
+        '<div><b>2</b><span>Prepare documents</span></div>'
+        '<div><b>3</b><span>Submit to staff</span></div></div>',
+        unsafe_allow_html=True,
     )
-
-    if st.button("🏠 Back to Home"):
-        st.session_state.page = "home"
-        st.rerun()
-
-    st.divider()
-
-    st.subheader("Medical Submission Checklist")
-
-    called_medical = st.checkbox(
-        "I have contacted/visited the Medical Centre."
-    )
-
-    reference_number = st.checkbox(
-        "I have obtained my medical reference number."
-    )
-
-    medical_report = st.checkbox(
-        "I have the required medical report/document."
-    )
-
-    required_documents = st.checkbox(
-        "I have prepared all required documents."
-    )
-
-    submission_information = st.checkbox(
-        "I know where and how to submit the documents."
-    )
-
-    completed = sum([
-        called_medical,
-        reference_number,
-        medical_report,
-        required_documents,
-        submission_information
-    ])
-
-    total = 5
-
-    progress = completed / total
-
-    st.progress(progress)
-
-    st.write(
-        f"### Progress: {completed}/{total} requirements completed"
-    )
-
-    if st.button(
-        "🔍 Check My Progress",
-        type="primary",
-        use_container_width=True
-    ):
-
-        missing = []
-
-        if not called_medical:
-            missing.append("Contact/visit the Medical Centre")
-
-        if not reference_number:
-            missing.append("Obtain your medical reference number")
-
-        if not medical_report:
-            missing.append("Prepare the medical report")
-
-        if not required_documents:
-            missing.append("Prepare all required documents")
-
-        if not submission_information:
-            missing.append("Confirm the submission procedure")
-
-        st.divider()
-
-        if len(missing) == 0:
-
-            st.success(
-                "✅ Your checklist is complete. "
-                "You appear to have completed the required steps."
-            )
-
-            st.info(
-                "Recommended next action: Proceed with the "
-                "official submission process."
-            )
-
-        else:
-
-            st.warning("⚠️ You still have missing requirements.")
-
-            st.subheader("Missing Requirements")
-
-            for item in missing:
-                st.write(f"❌ {item}")
-
-            st.info(
-                "Recommended next action: Complete the missing "
-                "requirements before submitting."
-            )
-
-    if st.button(
-        "🔄 Reset Checklist",
-        use_container_width=True
-    ):
-
-        st.rerun()
+    items = [
+        "I obtained or confirmed the required reference number.",
+        "I completed the student sections of the request form.",
+        "I prepared and signed the cover letter.",
+        "I obtained the required signatures, initials or stamps.",
+        "I attached the supporting medical certificate or report.",
+        "I checked that names, dates and document images are readable.",
+        "I confirmed the correct Medical Assistant or submission office.",
+    ]
+    completed = sum(st.checkbox(item, key=f"requirement_{i}") for i, item in enumerate(items))
+    st.markdown(f'<p class="progress-label"><strong>{completed} of {len(items)}</strong> requirements completed</p>', unsafe_allow_html=True)
+    st.progress(completed / len(items))
+    missing = len(items) - completed
+    if missing == 0:
+        st.success("Your checklist is complete. Staff must still perform the official review.")
+    else:
+        st.markdown(f'<div class="notice notice-coral"><strong>{missing} requirement(s) remaining.</strong> Complete them before submission.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="notice notice-amber"><strong>Reminder:</strong> Confirm all deadlines and procedures with the responsible university office.</div>', unsafe_allow_html=True)
 
 
-# =========================================================
-# PAGE ROUTING
-# =========================================================
+def about_page() -> None:
+    st.title("About and help")
+    st.markdown('<p class="page-lead">MediSub gives initial administrative guidance for the university medical-submission process.</p>', unsafe_allow_html=True)
+    left, right = st.columns(2)
+    with left:
+        st.subheader("How to use MediSub")
+        st.markdown("1. Ask your question in plain language.\n\n2. Review the category and confidence score.\n\n3. Prepare documents and complete the checklist.")
+    with right:
+        st.subheader("What MediSub can do")
+        st.markdown("✅ Suggest a question category\n\n✅ Provide a recommended next step\n\n✅ Check possible document omissions\n\n❌ Give medical advice or approve a submission")
+    st.subheader("Common questions")
+    with st.expander("Can MediSub approve my submission?"):
+        st.write("No. Only authorized university staff can review and approve it.")
+    with st.expander("Can MediSub issue a reference number?"):
+        st.write("No. Contact the University Medical Centre and follow its official procedure.")
+    with st.expander("Is the AI model always correct?"):
+        st.write("No. The TF-IDF and Logistic Regression model gives a prediction. Low-confidence answers should be confirmed with staff.")
+    st.markdown('<div class="notice notice-teal"><strong>Privacy:</strong> Avoid entering personal identifiers or uploading real medical records during prototype testing.</div>', unsafe_allow_html=True)
 
-navigation()
 
-if st.session_state.page == "home":
+apply_styles()
+if "page" not in st.session_state:
+    st.session_state.page = "Home"
 
+
+render_header()
+
+pages = [
+    "Home",
+    "Ask a Question",
+    "Documents",
+    "Checklist",
+    "About and Help",
+]
+
+selected = st.radio(
+    "Main navigation",
+    pages,
+    horizontal=True,
+    label_visibility="collapsed",
+    key="page",
+)
+
+if selected == "Home":
     home_page()
-
-elif st.session_state.page == "ask":
-
-    ask_question_page()
-
-elif st.session_state.page == "checklist":
-
+elif selected == "Ask a Question":
+    ask_page()
+elif selected == "Documents":
+    render_documents_page()
+elif selected == "Checklist":
     checklist_page()
+else:
+    about_page()
+
+render_footer()

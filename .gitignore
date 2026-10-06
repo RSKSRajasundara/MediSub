@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .venv/
 __pycache__/
 *.pyc
@@ -8,4 +9,26 @@ database/*.db
 models/*.joblib
 .pytest_cache/
 .ipynb_checkpoints/
+=======
+# Python virtual environment
+.venv/
+
+# Python temporary files
+__pycache__/
+*.pyc
+
+# Environment variables and secrets
+.env
+.streamlit/secrets.toml
+
+# Local databases
+database/*.db
+*.db
+
+# Testing and notebook temporary files
+.pytest_cache/
+.ipynb_checkpoints/
+
+# VS Code settings
+>>>>>>> 6b67bc21e11411a91f1d8ccd0e917d49e41a5855
 .vscode/

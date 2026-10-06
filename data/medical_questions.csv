@@ -1,0 +1,202 @@
+﻿id,question,category
+F001,How do I begin the medical submission process?,PROCESS_GUIDANCE
+F002,What steps should I follow to submit my medical documents?,PROCESS_GUIDANCE
+F003,How can I complete the medical submission process?,PROCESS_GUIDANCE
+F004,What is the procedure for submitting a medical after being absent?,PROCESS_GUIDANCE
+F005,Where should I start if I need to submit a medical?,PROCESS_GUIDANCE
+F006,What should I do after receiving my medical certificate?,PROCESS_GUIDANCE
+F007,Can you explain the process of submitting a medical to the university?,PROCESS_GUIDANCE
+F008,What are the steps involved in submitting a medical certificate?,PROCESS_GUIDANCE
+F009,How do I proceed with my medical submission?,PROCESS_GUIDANCE
+F010,What is the correct process for submitting a medical report?,PROCESS_GUIDANCE
+F011,How do I submit my medical certificate to the university?,PROCESS_GUIDANCE
+F012,What steps should I follow to submit my medical documents?,PROCESS_GUIDANCE
+F013,How can I complete the medical submission process?,PROCESS_GUIDANCE
+F014,What is the procedure for submitting a medical after being absent?,PROCESS_GUIDANCE
+F015,Where should I start if I need to submit a medical?,PROCESS_GUIDANCE
+F016,What should I do after receiving my medical certificate?,PROCESS_GUIDANCE
+F017,Can you explain the process of submitting a medical to the university?,PROCESS_GUIDANCE
+F018,What are the steps involved in submitting a medical certificate?,PROCESS_GUIDANCE
+F019,How do I proceed with my medical submission?,PROCESS_GUIDANCE
+F020,What is the correct process for submitting a medical report?,PROCESS_GUIDANCE
+F021,How can I submit a medical certificate for my university absence?,PROCESS_GUIDANCE
+F022,What is the first step in the medical submission procedure?,PROCESS_GUIDANCE
+F023,Can you guide me through the university medical submission process?,PROCESS_GUIDANCE
+F024,How do students submit medical certificates to the university?,PROCESS_GUIDANCE
+F025,What should I do before submitting my medical certificate?,PROCESS_GUIDANCE
+F026,How long does the medical submission process take?,PROCESS_GUIDANCE
+F027,What is the general procedure for submitting medical documents?,PROCESS_GUIDANCE
+F028,How do I begin the process of submitting a medical report?,PROCESS_GUIDANCE
+F029,What should I do once my medical certificate is ready?,PROCESS_GUIDANCE
+F030,Can you provide a step-by-step guide for medical submission?,PROCESS_GUIDANCE
+F031,How can I complete the university's medical documentation process?,PROCESS_GUIDANCE
+F032,What is the process for reporting an absence due to illness?,PROCESS_GUIDANCE
+F033,How do I follow the university's medical submission procedure?,PROCESS_GUIDANCE
+F034,What actions should I take to submit my medical successfully?,PROCESS_GUIDANCE
+F035,Can you tell me how the medical submission process works?,PROCESS_GUIDANCE
+F036,How should I proceed after being absent due to illness?,PROCESS_GUIDANCE
+F037,What is the proper way to submit my medical certificate?,PROCESS_GUIDANCE
+F038,How can I start submitting my medical documents?,PROCESS_GUIDANCE
+F039,What are the usual stages of the medical submission process?,PROCESS_GUIDANCE
+F040,How do I follow the correct steps when submitting a medical?,PROCESS_GUIDANCE
+F041,How can I get the reference number for my medical?,REFERENCE_NUMBER_HELP
+F042,Where can I find my medical reference number?,REFERENCE_NUMBER_HELP
+F043,What should I do if I don't have a reference number?,REFERENCE_NUMBER_HELP
+F044,I forgot my medical reference number. What should I do?,REFERENCE_NUMBER_HELP
+F045,How do I obtain a reference number for my medical submission?,REFERENCE_NUMBER_HELP
+F046,When will I receive the medical reference number?,REFERENCE_NUMBER_HELP
+F047,Who should I contact to get my medical reference number?,REFERENCE_NUMBER_HELP
+F048,I did not receive a reference number after calling the Medical Centre.,REFERENCE_NUMBER_HELP
+F049,What is the contact number of the Medical Centre?,REFERENCE_NUMBER_HELP
+F050,Is a reference number required for medical submission?,REFERENCE_NUMBER_HELP
+F051,Is a reference number required for medical submission?,REFERENCE_NUMBER_HELP
+F052,How can I retrieve my lost medical reference number?,REFERENCE_NUMBER_HELP
+F053,Where can I request a new reference number for my medical?,REFERENCE_NUMBER_HELP
+F054,I called the Medical Centre but haven't received my reference number. What should I do?,REFERENCE_NUMBER_HELP
+F055,How do I check whether my medical reference number has been issued?,REFERENCE_NUMBER_HELP
+F056,Can I submit my medical without a reference number?,REFERENCE_NUMBER_HELP
+F057,What should I do if I entered the wrong reference number?,REFERENCE_NUMBER_HELP
+F058,How can I confirm the reference number given by the Medical Centre?,REFERENCE_NUMBER_HELP
+F059,Is there a way to recover my medical reference number?,REFERENCE_NUMBER_HELP
+F060,Whom should I call if I have not received my reference number?,REFERENCE_NUMBER_HELP
+F061,How do I get my reference number after informing the Medical Centre?,REFERENCE_NUMBER_HELP
+F062,How can I get the reference number for my medical?,REFERENCE_NUMBER_HELP
+F063,Where can I find my medical reference number?,REFERENCE_NUMBER_HELP
+F064,What should I do if I don't have a reference number?,REFERENCE_NUMBER_HELP
+F065,I forgot my medical reference number. What should I do?,REFERENCE_NUMBER_HELP
+F066,How do I obtain a reference number for my medical submission?,REFERENCE_NUMBER_HELP
+F067,When will I receive the medical reference number?,REFERENCE_NUMBER_HELP
+F068,Who should I contact to get my medical reference number?,REFERENCE_NUMBER_HELP
+F069,I did not receive a reference number after calling the Medical Centre.,REFERENCE_NUMBER_HELP
+F070,What is the contact number of the Medical Centre?,REFERENCE_NUMBER_HELP
+F071,Is a reference number required for medical submission?,REFERENCE_NUMBER_HELP
+F072,I misplaced the reference number for my medical. How can I get it again?,REFERENCE_NUMBER_HELP
+F073,Does every medical certificate need a reference number?,REFERENCE_NUMBER_HELP
+F074,How can I contact the Medical Centre regarding my reference number?,REFERENCE_NUMBER_HELP
+F075,What happens if I forget to obtain a reference number?,REFERENCE_NUMBER_HELP
+F076,Can the Medical Centre provide my reference number again?,REFERENCE_NUMBER_HELP
+F077,How can I find out if my reference number is available?,REFERENCE_NUMBER_HELP
+F078,I have submitted my medical details but haven't received a reference number. What now?,REFERENCE_NUMBER_HELP
+F079,Where should I inquire about a missing medical reference number?,REFERENCE_NUMBER_HELP
+F080,Is the reference number provided immediately after contacting the Medical Centre?,REFERENCE_NUMBER_HELP
+F081,What information should I provide when requesting my medical reference number?,REFERENCE_NUMBER_HELP
+F082,What documents do I need to submit my medical?,DOCUMENT_REQUIREMENTS
+F083,Which documents are required for medical submission?,DOCUMENT_REQUIREMENTS
+F084,What should I prepare before submitting my medical?,DOCUMENT_REQUIREMENTS
+F085,Do I need a medical certificate for the submission?,DOCUMENT_REQUIREMENTS
+F086,What documents should I bring when submitting my medical?,DOCUMENT_REQUIREMENTS
+F087,Do I need any letter along with my medical certificate?,DOCUMENT_REQUIREMENTS
+F088,What paperwork is required for a medical submission?,DOCUMENT_REQUIREMENTS
+F089,What documents do I need to complete my medical submission?,DOCUMENT_REQUIREMENTS
+F090,"Is the medical report enough, or do I need other documents?",DOCUMENT_REQUIREMENTS
+F091,Can you tell me what documents are needed for submitting a medical?,DOCUMENT_REQUIREMENTS
+F092,Is a photocopy of my medical certificate required?,DOCUMENT_REQUIREMENTS
+F093,Do I need to provide my medical reference number along with the documents?,DOCUMENT_REQUIREMENTS
+F094,What supporting documents should I include with my medical certificate?,DOCUMENT_REQUIREMENTS
+F095,Is a doctor's signature necessary on my medical certificate?,DOCUMENT_REQUIREMENTS
+F096,Do I need to submit the original medical certificate?,DOCUMENT_REQUIREMENTS
+F097,Should I attach a copy of my national identity card to my medical submission?,DOCUMENT_REQUIREMENTS
+F098,Is there a specific medical submission form that I need to complete?,DOCUMENT_REQUIREMENTS
+F099,What information must be included in the medical submission form?,DOCUMENT_REQUIREMENTS
+F100,Do I need to provide proof of hospitalization when submitting my medical?,DOCUMENT_REQUIREMENTS
+F101,Are laboratory reports required along with my medical certificate?,DOCUMENT_REQUIREMENTS
+F102,Should I include my admission details when submitting medical documents?,DOCUMENT_REQUIREMENTS
+F103,Do I need to attach a letter explaining my absence?,DOCUMENT_REQUIREMENTS
+F104,Is a doctor's appointment receipt accepted as a supporting document?,DOCUMENT_REQUIREMENTS
+F105,What documents are necessary if I received treatment at a private hospital?,DOCUMENT_REQUIREMENTS
+F106,Do I need to provide the dates of my illness in the medical submission?,DOCUMENT_REQUIREMENTS
+F107,Is a university-issued medical form required for submission?,DOCUMENT_REQUIREMENTS
+F108,Should I bring both the original and photocopy of my medical certificate?,DOCUMENT_REQUIREMENTS
+F109,Are additional documents needed if my medical certificate covers several days?,DOCUMENT_REQUIREMENTS
+F110,What documents should I prepare before visiting the Management Assistant?,DOCUMENT_REQUIREMENTS
+F111,Do I need to submit a copy of my student registration details with my medical?,DOCUMENT_REQUIREMENTS
+F112,What documents do I need to submit my medical?,DOCUMENT_REQUIREMENTS
+F113,Which documents are required for medical submission?,DOCUMENT_REQUIREMENTS
+F114,What should I prepare before submitting my medical?,DOCUMENT_REQUIREMENTS
+F115,Do I need a medical certificate for the submission?,DOCUMENT_REQUIREMENTS
+F116,What documents should I bring when submitting my medical?,DOCUMENT_REQUIREMENTS
+F117,Do I need any letter along with my medical certificate?,DOCUMENT_REQUIREMENTS
+F118,What paperwork is required for a medical submission?,DOCUMENT_REQUIREMENTS
+F119,What documents do I need to complete my medical submission?,DOCUMENT_REQUIREMENTS
+F120,Can you tell me what documents are needed for submitting a medical?,DOCUMENT_REQUIREMENTS
+F121,Do I need to attach my student ID copy to the medical documents?,DOCUMENT_REQUIREMENTS
+F122,Where should I submit my medical documents to the Management Assistant?,MA_SUBMISSION_HELP
+F123,How do I submit my medical to the MA?,MA_SUBMISSION_HELP
+F124,What should I do when submitting my medical to the MA?,MA_SUBMISSION_HELP
+F125,Who should I give my medical documents to?,MA_SUBMISSION_HELP
+F126,Where can I hand over my medical documents?,MA_SUBMISSION_HELP
+F127,I have completed my medical documents. How do I submit them to the MA?,MA_SUBMISSION_HELP
+F128,Can I submit my medical documents directly to the MA?,MA_SUBMISSION_HELP
+F129,What is the procedure for handing over my medical to the MA?,MA_SUBMISSION_HELP
+F130,I need help submitting my medical documents to the MA.,MA_SUBMISSION_HELP
+F131,Should I give my medical certificate to the Management Assistant?,MA_SUBMISSION_HELP
+F132,How can I hand over my completed medical application to the MA?,MA_SUBMISSION_HELP
+F133,What should I do after preparing all my medical documents for the MA?,MA_SUBMISSION_HELP
+F134,Where can I find the Management Assistant to submit my medical?,MA_SUBMISSION_HELP
+F135,Do I need to visit the MA's office to hand in my medical documents?,MA_SUBMISSION_HELP
+F136,How should I deliver my medical certificate to the Management Assistant?,MA_SUBMISSION_HELP
+F137,Can I hand over my medical documents at the university office?,MA_SUBMISSION_HELP
+F138,Who is responsible for receiving medical submissions from students?,MA_SUBMISSION_HELP
+F139,Where do I go to hand in my medical certificate to the MA?,MA_SUBMISSION_HELP
+F140,I have all my medical documents ready. Where should I take them?,MA_SUBMISSION_HELP
+F141,Where should I submit my medical documents to the Management Assistant?,MA_SUBMISSION_HELP
+F142,How do I submit my medical to the MA?,MA_SUBMISSION_HELP
+F143,What should I do when submitting my medical to the MA?,MA_SUBMISSION_HELP
+F144,Who should I give my medical documents to?,MA_SUBMISSION_HELP
+F145,Where can I hand over my medical documents?,MA_SUBMISSION_HELP
+F146,I have completed my medical documents. How do I submit them to the MA?,MA_SUBMISSION_HELP
+F147,Can I submit my medical documents directly to the MA?,MA_SUBMISSION_HELP
+F148,What is the procedure for handing over my medical to the MA?,MA_SUBMISSION_HELP
+F149,I need help submitting my medical documents to the MA.,MA_SUBMISSION_HELP
+F150,Where is the correct place to submit my completed medical documents?,MA_SUBMISSION_HELP
+F151,Where is the correct place to submit my completed medical documents?,MA_SUBMISSION_HELP
+F152,What is the correct way to hand over my medical documents to the MA?,MA_SUBMISSION_HELP
+F153,Do I need to meet the Management Assistant when submitting my medical?,MA_SUBMISSION_HELP
+F154,How do I give my medical certificate and supporting documents to the MA?,MA_SUBMISSION_HELP
+F155,Can you guide me on submitting my medical documents to the university MA?,MA_SUBMISSION_HELP
+F156,Should I submit my medical documents to my faculty's Management Assistant?,MA_SUBMISSION_HELP
+F157,How do I contact the MA regarding my medical submission?,MA_SUBMISSION_HELP
+F158,What should I do if the MA is unavailable when I want to submit my medical?,MA_SUBMISSION_HELP
+F159,Where should I leave my medical documents for the Management Assistant?,MA_SUBMISSION_HELP
+F160,Can I submit the completed medical form to the MA in person?,MA_SUBMISSION_HELP
+F161,I have obtained my reference number. How do I hand over my medical to the MA?,MA_SUBMISSION_HELP
+F162,What should I do if I am hospitalized during my examination period?,OUT_OF_SCOPE
+F163,Can I get academic leave for a long-term illness?,OUT_OF_SCOPE
+F164,How do I request an extension for an assignment because of illness?,OUT_OF_SCOPE
+F165,What is the procedure for appealing an examination decision?,OUT_OF_SCOPE
+F166,Can I get a scholarship extension because of medical reasons?,OUT_OF_SCOPE
+F167,How can I obtain financial assistance for hospital expenses?,OUT_OF_SCOPE
+F168,What treatment should I take for a severe headache?,OUT_OF_SCOPE
+F169,Can you diagnose my illness based on my symptoms?,OUT_OF_SCOPE
+F170,Which hospital should I visit for emergency treatment?,OUT_OF_SCOPE
+F171,Can I get permission to sit for a missed examination using my medical certificate?,OUT_OF_SCOPE
+F172,How can I appeal if my medical certificate is rejected for an examination?,OUT_OF_SCOPE
+F173,What happens if I miss a final examination due to illness?,OUT_OF_SCOPE
+F174,Can I postpone my examination because I am sick?,OUT_OF_SCOPE
+F175,How do I apply for a repeat examination after being absent?,OUT_OF_SCOPE
+F176,What is the procedure for submitting a medical related to a repeat exam?,OUT_OF_SCOPE
+F177,Where should I submit my medical if I was absent for a examination?,OUT_OF_SCOPE
+F178,Can I use a medical certificate for a missed examination?,OUT_OF_SCOPE
+F179,Can I submit my medical immediately after becoming sick?,OUT_OF_SCOPE
+F180,What should I do if I could not contact the Medical Centre on the absence date?,OUT_OF_SCOPE
+F181,Can someone else submit my medical documents for me?,OUT_OF_SCOPE
+F182,What should I do if I missed the deadline for medical submission?,OUT_OF_SCOPE
+F183,What should I do if I was admitted to a hospital and need to submit a medical?,OUT_OF_SCOPE
+F184,I had an accident and need to know how to submit my medical.,OUT_OF_SCOPE
+F185,How can I submit an accident-related medical report?,OUT_OF_SCOPE
+F186,Can I get a refund for an examination I missed due to illness?,OUT_OF_SCOPE
+F187,What is the university's attendance policy for medical leave?,OUT_OF_SCOPE
+F188,Can I attend an examination if I am recovering from an illness?,OUT_OF_SCOPE
+F189,How do I request special consideration for a missed examination?,OUT_OF_SCOPE
+F190,Can I submit a medical certificate after the examination results are released?,OUT_OF_SCOPE
+F191,How do I apply for university hostel leave due to illness?,OUT_OF_SCOPE
+F192,What is the procedure for submitting a medical related to a repeat exam?,OUT_OF_SCOPE
+F193,Where should I submit my medical if I was absent for an examination?,OUT_OF_SCOPE
+F194,Can I use a medical certificate for a missed examination?,OUT_OF_SCOPE
+F195,Can I submit my medical immediately after becoming sick?,OUT_OF_SCOPE
+F196,What should I do if I could not contact the Medical Centre on the absence date?,OUT_OF_SCOPE
+F197,Can someone else submit my medical documents for me?,OUT_OF_SCOPE
+F198,What should I do if I missed the deadline for medical submission?,OUT_OF_SCOPE
+F199,What should I do if I was admitted to a hospital and need to submit a medical?,OUT_OF_SCOPE
+F200,I had an accident and need to know how to submit my medical.,OUT_OF_SCOPE
+F201,How can I submit an accident-related medical report?,OUT_OF_SCOPE
