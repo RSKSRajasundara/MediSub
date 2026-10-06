@@ -200,3 +200,43 @@ F198,What should I do if I missed the deadline for medical submission?,OUT_OF_SC
 F199,What should I do if I was admitted to a hospital and need to submit a medical?,OUT_OF_SCOPE
 F200,I had an accident and need to know how to submit my medical.,OUT_OF_SCOPE
 F201,How can I submit an accident-related medical report?,OUT_OF_SCOPE
+F202, I have less than 80% attendance because I was sick. How can I submit my medical?, PROCESS_GUIDANCE
+F203, My attendance is below 80% due to illness. What is the process for submitting a medical?, PROCESS_GUIDANCE
+F204, I was absent because of illness and now my attendance is below 80%. How do I submit my medical?, PROCESS_GUIDANCE
+F205, How can I submit a medical certificate for my low attendance caused by illness?, PROCESS_GUIDANCE
+F206, I could not maintain 80% attendance because I was sick. What steps should I follow to submit my medical?, PROCESS_GUIDANCE
+F207, What should I do if my attendance is below 80% because of a medical condition?, PROCESS_GUIDANCE
+F208, How do I submit my medical certificate when illness caused me to fall below the required attendance?, PROCESS_GUIDANCE
+F209, I have a medical certificate for the days I was absent. How can I submit it to the university?, PROCESS_GUIDANCE
+F210, My attendance is less than 80% because I was ill. Can you explain the medical submission process?, PROCESS_GUIDANCE
+F211, What procedure should I follow to submit a medical for attendance shortage due to illness?, PROCESS_GUIDANCE
+F212, My attendance is below 80% due to illness. How can I get the reference number for my medical?, REFERENCE_NUMBER_HELP
+F213, Where can I get the medical reference number for my attendance shortage?, REFERENCE_NUMBER_HELP
+F214, I was sick and my attendance is below 80%. Do I need a reference number to submit my medical?, REFERENCE_NUMBER_HELP
+F215, How can I obtain a reference number for a medical related to my low attendance?, REFERENCE_NUMBER_HELP
+F216, I have a medical certificate but I don't have the reference number. What should I do?, REFERENCE_NUMBER_HELP
+F217, Where can I find the reference number for my medical submission?, REFERENCE_NUMBER_HELP
+F218, I was absent due to illness and need a reference number. Who should I contact?, REFERENCE_NUMBER_HELP
+F219, My attendance is below 80% because of illness and I haven't received my medical reference number. What should I do?, REFERENCE_NUMBER_HELP
+F220, How do I get the reference number before submitting my medical certificate?, REFERENCE_NUMBER_HELP
+F221, I lost the reference number given for my medical. How can I retrieve it?, REFERENCE_NUMBER_HELP
+F222, What documents do I need if my attendance is below 80% because of illness?, DOCUMENT_REQUIREMENTS
+F223, What documents should I submit with my medical certificate for low attendance?, DOCUMENT_REQUIREMENTS
+F224, Do I need a medical certificate if my attendance is below 80% due to illness?, DOCUMENT_REQUIREMENTS
+F225, What paperwork is required to support my attendance shortage due to illness?, DOCUMENT_REQUIREMENTS
+F226, Do I need any additional documents along with my medical certificate?, DOCUMENT_REQUIREMENTS
+F227, What documents should I prepare before submitting a medical for attendance shortage?, DOCUMENT_REQUIREMENTS
+F228, Do I need to provide proof of illness when my attendance is below 80%?, DOCUMENT_REQUIREMENTS
+F229, Is the medical certificate enough to support my low attendance?, DOCUMENT_REQUIREMENTS
+F230, What supporting documents are needed for a medical submission due to low attendance?, DOCUMENT_REQUIREMENTS
+F231, Do I need a letter along with my medical certificate because my attendance is below 80%?, DOCUMENT_REQUIREMENTS
+F232, My attendance is below 80% because I was sick. Can I sit for the examination?, OUT_OF_SCOPE
+F233, Can I get permission to sit for the exam if my attendance is below 80% due to illness?, OUT_OF_SCOPE
+F234, Will my medical certificate allow me to sit for the examination despite having less than 80% attendance?, OUT_OF_SCOPE
+F235, Can the university approve my exam eligibility because I was sick?, OUT_OF_SCOPE
+F236, What should I do if I am not allowed to sit for the exam because my attendance is below 80%?, OUT_OF_SCOPE
+F237, Can I appeal the 80% attendance requirement using my medical certificate?, OUT_OF_SCOPE
+F238, Will submitting a medical automatically make me eligible for the examination?, OUT_OF_SCOPE
+F239, Can I get special permission to attend the exam because I was hospitalized?, OUT_OF_SCOPE
+F240, What happens if my medical is rejected and my attendance is still below 80%?, OUT_OF_SCOPE
+F241, Can I take a repeat examination because my illness caused my attendance to fall below 80%?, OUT_OF_SCOPE
