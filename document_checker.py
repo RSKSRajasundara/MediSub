@@ -1,99 +1,195 @@
-from pathlib import Path
+"""OCR-assisted completeness checks for MediSub documents.
 
-import streamlit as st
+The module detects visible text and combines it with the student's manual
+confirmations. It does not authenticate signatures, stamps, identities, or
+medical evidence, and it never approves a submission.
+"""
 
-try:
-    from document_checker import (
-        check_cover_letter,
-        check_medical_certificate,
-        check_request_form,
-        extract_text,
+from dataclasses import dataclass
+from io import BytesIO
+import os
+import re
+import shutil
+from typing import Mapping
+
+from PIL import Image, ImageEnhance, ImageOps
+
+@dataclass(frozen=True)
+class CheckResult:
+    document_type: str
+    status: str
+    passed: list[str]
+    warnings: list[str]
+    manual_checks: list[str]
+
+
+def _normalise(text: str) -> str:
+    return re.sub(r"\s+", " ", text.lower()).strip()
+
+
+def _contains_any(text: str, terms: tuple[str, ...]) -> bool:
+    return any(term in text for term in terms)
+
+
+def _manual_value(checks: Mapping[str, bool], key: str) -> bool:
+    return bool(checks.get(key, False))
+
+
+def _tesseract_command() -> str:
+    configured = os.getenv("TESSERACT_CMD")
+    candidates = (
+        configured,
+        shutil.which("tesseract"),
+        r"C:\Program Files\Tesseract-OCR\tesseract.exe",
+        r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe",
     )
-except ImportError:
-    check_cover_letter = None
-
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-DOWNLOAD_DIR = BASE_DIR / "downloads"
-
-
-def render_documents_page() -> None:
-    st.title("Prepare and check documents")
-    st.markdown(
-        '<p class="page-lead">Download the templates, complete the papers and upload clear scans for a basic completeness check.</p>',
-        unsafe_allow_html=True,
+    for candidate in candidates:
+        if candidate and (os.path.isfile(candidate) or shutil.which(candidate)):
+            return candidate
+    raise RuntimeError(
+        "Tesseract OCR is not installed. Install Tesseract and either add it "
+        "to PATH or set TESSERACT_CMD to tesseract.exe."
     )
-    prepare_tab, upload_tab = st.tabs(["1. Prepare documents", "2. Upload and check"])
 
-    with prepare_tab:
-        left, right = st.columns(2)
-        with left:
-            st.markdown('<div class="doc-card"><span class="pill pill-teal">Required form</span><h3>Medical Approval Request Form</h3><p>Complete only the student sections and obtain the required official signatures.</p></div>', unsafe_allow_html=True)
-            form_path = DOWNLOAD_DIR / "Request-form-for-Medical-Approval.pdf"
-            if form_path.exists():
-                st.download_button("Download official request form", form_path.read_bytes(), form_path.name, "application/pdf", use_container_width=True)
-            else:
-                st.info(f"Add {form_path.name} to the downloads folder.")
-        with right:
-            st.markdown('<div class="doc-card"><span class="pill pill-teal">Letter</span><h3>Cover letter</h3><p>State the absence period and route the letter through the required faculty officials.</p></div>', unsafe_allow_html=True)
-            letter_path = DOWNLOAD_DIR / "MediSub-Cover-Letter-Template.docx"
-            if letter_path.exists():
-                st.download_button("Download cover-letter template", letter_path.read_bytes(), letter_path.name, use_container_width=True)
-            else:
-                st.info(f"Add {letter_path.name} to the downloads folder.")
-        with st.expander("How to complete the cover letter"):
-            st.markdown("1. Replace every placeholder.\n2. Include your identity and absence dates.\n3. State the requested action.\n4. Sign the letter.\n5. Obtain every required approval.\n6. Scan the complete page clearly.")
 
-    with upload_tab:
-        st.warning("The checker identifies possible omissions only. It cannot authenticate signatures, validate evidence or approve a submission.")
-        request_files = st.file_uploader("Completed request form — upload both page images", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
-        with st.expander("Request-form manual checks", expanded=False):
-            r1 = st.checkbox("Student and certificate fields are completed")
-            r2 = st.checkbox("At least one absence row is completed")
-            r3 = st.checkbox("Student signature is present")
-            r4 = st.checkbox("Assistant Registrar date and signature are present")
-            r5 = st.checkbox("Both pages are included")
+def _result(
+    document_type: str,
+    passed: list[str],
+    warnings: list[str],
+    manual_checks: list[str],
+) -> CheckResult:
+    status = "Ready for staff review" if not warnings else "Needs correction"
+    return CheckResult(document_type, status, passed, warnings, manual_checks)
 
-        letter_file = st.file_uploader("Signed and routed cover letter", type=["jpg", "jpeg", "png"])
-        with st.expander("Cover-letter manual checks", expanded=False):
-            l1 = st.checkbox("Identity details are correct")
-            l2 = st.checkbox("Absence period and requested action are stated")
-            l3 = st.checkbox("Student signature is present on the letter")
-            l4 = st.checkbox("Required routing approvals are present")
 
-        certificate_file = st.file_uploader("Medical certificate or report", type=["jpg", "jpeg", "png"])
-        with st.expander("Medical-document manual checks", expanded=False):
-            m1 = st.checkbox("Identity matches the request form")
-            m2 = st.checkbox("Issue date and absence period are visible")
-            m3 = st.checkbox("Practitioner signature and official stamp are visible")
+def extract_text(image_bytes: bytes) -> str:
+    """Extract text from a JPG, JPEG, or PNG image using Tesseract OCR."""
+    if not image_bytes:
+        raise ValueError("The uploaded image is empty.")
 
-        if st.button("Check uploaded documents", type="primary"):
-            if check_cover_letter is None:
-                st.error("document_checker.py could not be loaded. Keep it beside app.py.")
-                return
-            results = []
-            try:
-                if request_files:
-                    text = "\n".join(extract_text(file.getvalue()) for file in request_files)
-                    results.append(check_request_form(text, {"student_fields": r1, "absence_rows": r2, "student_signature": r3, "assistant_registrar": r4, "two_pages": r5}))
-                else:
-                    st.error("Request form is missing.")
-                if letter_file:
-                    results.append(check_cover_letter(extract_text(letter_file.getvalue()), {"identity": l1, "period": l2, "student_signature": l3, "routing_approvals": l4}))
-                else:
-                    st.error("Cover letter is missing.")
-                if certificate_file:
-                    results.append(check_medical_certificate(extract_text(certificate_file.getvalue()), {"identity": m1, "period": m2, "signature_stamp": m3}))
-                else:
-                    st.error("Medical certificate or report is missing.")
+    try:
+        import pytesseract
 
-                for result in results:
-                    st.markdown(f'<div class="doc-card"><h3>{result.document_type}</h3><span class="status">{result.status}</span></div>', unsafe_allow_html=True)
-                    for item in result.passed:
-                        st.success(item)
-                    for item in result.warnings:
-                        st.warning(item)
-                    for item in result.manual_checks:
-                        st.info(item)
-            except RuntimeError as exc:
-                st.error(f"OCR is not available: {exc}")
+        pytesseract.pytesseract.tesseract_cmd = _tesseract_command()
+        image = Image.open(BytesIO(image_bytes)).convert("L")
+        image = ImageOps.autocontrast(image)
+        image = ImageEnhance.Contrast(image).enhance(1.5)
+        return pytesseract.image_to_string(image, config="--psm 6").strip()
+    except ImportError as exc:
+        raise RuntimeError(
+            "pytesseract is not installed. Install the project requirements."
+        ) from exc
+    except RuntimeError:
+        raise
+    except Exception as exc:
+        if exc.__class__.__name__ == "TesseractNotFoundError":
+            raise RuntimeError(
+                "Tesseract OCR could not be started. Check TESSERACT_CMD or PATH."
+            ) from exc
+        if isinstance(exc, (OSError, ValueError)):
+            raise RuntimeError(
+                "The uploaded image could not be opened. Upload a JPG, JPEG, or PNG image."
+            ) from exc
+        raise RuntimeError("The uploaded image could not be processed.") from exc
+
+
+def check_request_form(text: str, checks: Mapping[str, bool]) -> CheckResult:
+    clean = _normalise(text)
+    passed: list[str] = []
+    warnings: list[str] = []
+
+    if len(clean) >= 80:
+        passed.append("Readable text was detected on the request form.")
+    else:
+        warnings.append("Very little text was detected. Upload clearer images of both pages.")
+
+    if _contains_any(clean, ("medical approval", "medical certificate", "student", "registration")):
+        passed.append("Request-form wording was detected.")
+    else:
+        warnings.append("The image could not be confidently identified as the medical request form.")
+
+    required = {
+        "student_fields": "Confirm that the student and certificate fields are completed.",
+        "absence_rows": "Complete at least one absence row.",
+        "student_signature": "Add the student's signature.",
+        "assistant_registrar": "Obtain the Assistant Registrar date and signature.",
+        "two_pages": "Upload both pages of the request form.",
+    }
+    for key, message in required.items():
+        if _manual_value(checks, key):
+            passed.append(message.replace("Confirm that ", "Confirmed: ").replace("Complete ", "Completed: ").replace("Add ", "Confirmed: ").replace("Obtain ", "Confirmed: ").replace("Upload ", "Confirmed: "))
+        else:
+            warnings.append(message)
+
+    manual = [
+        "Staff must verify the identity details, handwriting, signatures, dates and official sections.",
+        "OCR does not confirm that the information is genuine or accurate.",
+    ]
+    return _result("Medical Approval Request Form", passed, warnings, manual)
+
+
+def check_cover_letter(text: str, checks: Mapping[str, bool]) -> CheckResult:
+    clean = _normalise(text)
+    passed: list[str] = []
+    warnings: list[str] = []
+
+    if len(clean) >= 60:
+        passed.append("Readable text was detected on the cover letter.")
+    else:
+        warnings.append("Very little cover-letter text was detected. Upload a clearer image.")
+
+    if _contains_any(clean, ("medical officer", "medical", "absence", "dean", "registrar")):
+        passed.append("Medical-submission wording was detected in the letter.")
+    else:
+        warnings.append("The image could not be confidently identified as a medical-submission cover letter.")
+
+    required = {
+        "identity": "Confirm that the identity details are correct.",
+        "period": "State the absence period and requested action.",
+        "student_signature": "Add the student's signature to the letter.",
+        "routing_approvals": "Obtain every required routing approval.",
+    }
+    for key, message in required.items():
+        if _manual_value(checks, key):
+            passed.append("Confirmed: " + message[0].lower() + message[1:].rstrip("."))
+        else:
+            warnings.append(message)
+
+    manual = [
+        "Staff must verify the named student, dates, signatures and routing approvals.",
+        "The checker cannot decide whether the stated reason is acceptable.",
+    ]
+    return _result("Cover Letter", passed, warnings, manual)
+
+
+def check_medical_certificate(text: str, checks: Mapping[str, bool]) -> CheckResult:
+    clean = _normalise(text)
+    passed: list[str] = []
+    warnings: list[str] = []
+
+    if len(clean) >= 40:
+        passed.append("Readable text was detected on the medical document.")
+    else:
+        warnings.append("Very little text was detected. Upload a clearer certificate or report.")
+
+    if _contains_any(clean, ("medical certificate", "hospital", "doctor", "medical officer", "patient")):
+        passed.append("Medical-document wording was detected.")
+    else:
+        warnings.append("The image could not be confidently identified as a medical certificate or report.")
+
+    required = {
+        "identity": "Confirm that the identity matches the request form.",
+        "period": "Confirm that the issue date and recommended absence period are visible.",
+        "signature_stamp": "Confirm that the practitioner signature and official stamp are visible.",
+    }
+    for key, message in required.items():
+        if _manual_value(checks, key):
+            passed.append("Confirmed: " + message[0].lower() + message[1:].rstrip("."))
+        else:
+            warnings.append(message)
+
+    manual = [
+        "Authorized staff must verify the practitioner, signature, stamp, dates and medical evidence.",
+        "The checker does not diagnose illness or validate the medical claim.",
+    ]
+    return _result("Medical Certificate or Report", passed, warnings, manual)

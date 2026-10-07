@@ -1,4 +1,5 @@
 from pathlib import Path
+from html import escape
 
 import streamlit as st
 
@@ -15,6 +16,14 @@ except ImportError:
 
 BASE_DIR = Path(__file__).resolve().parent
 DOWNLOAD_DIR = BASE_DIR / "downloads"
+
+
+def _render_check_list(title: str, items: list[str]) -> None:
+    st.markdown(f"**{title}**")
+    if items:
+        st.markdown("\n".join(f"- {escape(item)}" for item in items))
+    else:
+        st.caption("None")
 
 
 def render_documents_page() -> None:
@@ -88,12 +97,12 @@ def render_documents_page() -> None:
                     st.error("Medical certificate or report is missing.")
 
                 for result in results:
-                    st.markdown(f'<div class="doc-card"><h3>{result.document_type}</h3><span class="status">{result.status}</span></div>', unsafe_allow_html=True)
-                    for item in result.passed:
-                        st.success(item)
-                    for item in result.warnings:
-                        st.warning(item)
-                    for item in result.manual_checks:
-                        st.info(item)
+                    st.markdown(
+                        f'<div class="doc-card"><h3>{escape(result.document_type)}</h3></div>',
+                        unsafe_allow_html=True,
+                    )
+                    _render_check_list("Correctly filled", result.passed)
+                    _render_check_list("Missing", result.warnings)
+                    _render_check_list("Recheck", result.manual_checks)
             except RuntimeError as exc:
                 st.error(f"OCR is not available: {exc}")

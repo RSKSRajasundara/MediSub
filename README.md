@@ -24,6 +24,7 @@ The current version uses TF-IDF and Logistic Regression to classify questions an
 - Jupyter Notebook
 - Pytest
 - Git and GitHub
+- Tesseract OCR (required for document image text extraction)
 
 ## Project Structure
 
@@ -103,6 +104,21 @@ From the main `MediSub` folder, run:
 streamlit run app.py
 ```
 
+### Document checker OCR setup
+
+The document checker uses `pytesseract` to read uploaded JPG, JPEG, and PNG
+images. Install the Tesseract OCR application separately, then either add its
+installation folder to `PATH` or set `TESSERACT_CMD` to the full path of
+`tesseract.exe`, for example:
+
+```powershell
+$env:TESSERACT_CMD = "C:\Program Files\Tesseract-OCR\tesseract.exe"
+streamlit run app.py
+```
+
+Without Tesseract, the manual checklist still loads, but image OCR checks
+will show an explicit setup error.
+
 The application will normally open at:
 
 ```text
@@ -118,4 +134,3 @@ Press `Ctrl + C` in the terminal to stop it.
 - TF-IDF and Logistic Regression model added
 - Model training notebook created
 - Basic Streamlit classification interface created
-
