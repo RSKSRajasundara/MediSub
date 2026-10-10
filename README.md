@@ -134,3 +134,11 @@ Press `Ctrl + C` in the terminal to stop it.
 - TF-IDF and Logistic Regression model added
 - Model training notebook created
 - Basic Streamlit classification interface created
+
+- ---
+
+## 👥 Team Members
+
+- **Kavithima Rajasundara** (`RSKSRajasundara`)
+- **Sethini Nenuwari** (`sethininenuwari-pixel`)
+- **Ashan Fernando** (`ashanfernan`)
