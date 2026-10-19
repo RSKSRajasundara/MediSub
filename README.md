@@ -152,3 +152,4 @@ Press `Ctrl + C` in the terminal to stop it.
 - **Kavithima Rajasundara** (`RSKSRajasundara`)
 - **Sethini Nenuwari** (`sethininenuwari-pixel`)
 - **Ashan Fernando** (`ashanfernan`)
+- **M.K.F.G. Dhinany** (`ItsDhina`)
