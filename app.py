@@ -10,6 +10,12 @@ try:
 except ImportError:
     predict_question = None
 
+try:
+    from database import initialize_database, save_question_event
+except ImportError:
+    initialize_database = None
+    save_question_event = None
+
 st.set_page_config(
     page_title="MediSub",
     page_icon="🩺",
@@ -54,6 +60,41 @@ def change_page(page_name: str) -> None:
 
 def clear_question() -> None:
     st.session_state.medical_question = ""
+
+
+def initialize_persistence() -> None:
+    if "db_available" in st.session_state:
+        return
+
+    st.session_state.db_available = False
+    st.session_state.db_error = None
+
+    if initialize_database is None:
+        st.session_state.db_error = "database.py could not be loaded."
+        return
+
+    try:
+        initialize_database()
+        st.session_state.db_available = True
+    except Exception as exc:
+        st.session_state.db_error = str(exc)
+
+
+def persist_prediction(question: str, category: str, confidence: float) -> None:
+    if not st.session_state.get("db_available") or save_question_event is None:
+        return
+
+    try:
+        save_question_event(
+            question=question,
+            predicted_category=category,
+            confidence=confidence,
+        )
+    except Exception as exc:
+        st.warning(
+            "Guidance was shown, but the result could not be saved locally. "
+            f"Reason: {exc}"
+        )
 
 
 def render_header() -> None:
@@ -165,6 +206,10 @@ def ask_page() -> None:
         '<span>Which documents are required?</span><span>Where should I submit them?</span></div>',
         unsafe_allow_html=True,
     )
+    if st.session_state.get("db_error"):
+        st.info(
+            "Local result storage is unavailable. Classification and checklist features still work."
+        )
 
     left, right = st.columns([1, 4])
     with left:
@@ -206,6 +251,7 @@ def ask_page() -> None:
             st.progress(max(0, min(percent, 100)) / 100)
             st.caption(f"Category: {category}")
             st.markdown('</div>', unsafe_allow_html=True)
+        persist_prediction(question=question.strip(), category=category, confidence=confidence)
         if needs_referral:
             st.warning("The model is not fully certain. Add more detail or confirm the answer with authorized staff.")
     except Exception as exc:
@@ -265,6 +311,7 @@ apply_styles()
 if "page" not in st.session_state:
     st.session_state.page = "Home"
 
+initialize_persistence()
 
 render_header()
 

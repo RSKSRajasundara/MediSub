@@ -10,6 +10,7 @@ Students can enter a question, and the system classifies it into one of the foll
 - `OUT_OF_SCOPE`
 
 The current version uses TF-IDF and Logistic Regression to classify questions and display a confidence score.
+Question results can also be stored in a local SQLite database.
 
 ## technologies used 
 
@@ -103,6 +104,15 @@ From the main `MediSub` folder, run:
 ```powershell
 streamlit run app.py
 ```
+
+### SQLite persistence (optional, local)
+
+- MediSub initializes a local SQLite database automatically when `app.py` starts.
+- Default database path: `data/medisub.db`
+- Override path with environment variable `MEDISUB_DB_PATH` (useful for deployments and tests).
+- Stored fields: submitted question text, predicted category, confidence score, and timestamp.
+- The app does **not** store uploaded document files or OCR output text.
+- If the database cannot be created or written (for example read-only/ephemeral filesystem), classification and checklist features still work and the app shows a non-blocking message.
 
 ### Document checker OCR setup
 
